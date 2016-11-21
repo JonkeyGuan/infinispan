@@ -26,32 +26,34 @@ public class Run {
 
     public static void put() {
 	int i = 0;
-	while (true) {
+	//while (true) {
 	    try {
-		String id = "user" + seq.getAndIncrement();
+		String id = "user1";// + seq.getAndIncrement();
 		User user = new User(id, data);
-		DistributedCache.put(id, user);
+//		DistributedCache.put(id, user);
+		DistributedCache.putIfAbsent(id, user);
 		System.out.println("put: " + user);
-		if (i > 1024 * 1024 * 6) {
-		break;
-		}
+//		if (i > 1024 * 1024 * 6) {
+//		break;
+//		}
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }
-	}
+	//}
     }
 
     public static void get() {
 	while (true) {
 	    try {
 		long i = ThreadLocalRandom.current().nextLong(1000000);
-		String id = "user" + i;
+		String id = "user2";// + i;
 		User user = DistributedCache.get(id);
 		if (user == null) {
-		System.out.println("can't get user by " + id);
+		    System.out.println("can't get user by " + id);
 		} else {
-		System.out.println(user);
+		    System.out.println(user);
 		}
+		Thread.sleep(3000);
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }
