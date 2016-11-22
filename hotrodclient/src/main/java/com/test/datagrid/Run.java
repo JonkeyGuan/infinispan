@@ -26,20 +26,20 @@ public class Run {
 
     public static void put() {
 	int i = 0;
-	//while (true) {
-	    try {
-		String id = "user1";// + seq.getAndIncrement();
-		User user = new User(id, data);
-//		DistributedCache.put(id, user);
-		DistributedCache.putIfAbsent(id, user);
-		System.out.println("put: " + user);
-//		if (i > 1024 * 1024 * 6) {
-//		break;
-//		}
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	//}
+	// while (true) {
+	try {
+	    String id = "user1";// + seq.getAndIncrement();
+	    User user = new User(id, data);
+	    // DistributedCache.put(id, user);
+	    DistributedCache.putIfAbsent(id, user);
+	    System.out.println("put: " + user);
+	    // if (i > 1024 * 1024 * 6) {
+	    // break;
+	    // }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	// }
     }
 
     public static void get() {

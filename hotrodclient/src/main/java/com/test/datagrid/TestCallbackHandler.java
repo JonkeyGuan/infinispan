@@ -31,8 +31,7 @@ public class TestCallbackHandler implements CallbackHandler {
 		passwordCallback.setPassword(password);
 	    } else if (callback instanceof AuthorizeCallback) {
 		AuthorizeCallback authorizeCallback = (AuthorizeCallback) callback;
-		authorizeCallback.setAuthorized(
-			authorizeCallback.getAuthenticationID().equals(authorizeCallback.getAuthorizationID()));
+		authorizeCallback.setAuthorized(authorizeCallback.getAuthenticationID().equals(authorizeCallback.getAuthorizationID()));
 	    } else if (callback instanceof RealmCallback) {
 		RealmCallback realmCallback = (RealmCallback) callback;
 		realmCallback.setText(realm);
