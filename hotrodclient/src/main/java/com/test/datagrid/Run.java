@@ -3,11 +3,17 @@ package com.test.datagrid;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.test.datagrid.cache.ReadDistributedCache;
+import com.test.datagrid.cache.WriteDistributedCache;
+
 public class Run {
 
     private static AtomicLong seq = new AtomicLong(0);
 
     private static String data = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234";
+
+    private static ReadDistributedCache readDistributedCache;
+    private static WriteDistributedCache writeDistributedCahce;
 
     public static void main(String[] args) {
 	String type = "put";
@@ -16,6 +22,12 @@ public class Run {
 		type = args[0];
 	    }
 	}
+
+	readDistributedCache = new ReadDistributedCache();
+	readDistributedCache.init();
+
+	writeDistributedCahce = new WriteDistributedCache();
+	writeDistributedCahce.init();
 
 	if (type.equals("put")) {
 	    put();
@@ -28,10 +40,10 @@ public class Run {
 	int i = 0;
 	// while (true) {
 	try {
-	    String id = "user1";// + seq.getAndIncrement();
+	    String id = "user11";// + seq.getAndIncrement();
 	    User user = new User(id, data);
 	    // DistributedCache.put(id, user);
-	    DistributedCache.putIfAbsent(id, user);
+	    writeDistributedCahce.putIfAbsent(id, user);
 	    System.out.println("put: " + user);
 	    // if (i > 1024 * 1024 * 6) {
 	    // break;
@@ -46,8 +58,8 @@ public class Run {
 	while (true) {
 	    try {
 		long i = ThreadLocalRandom.current().nextLong(1000000);
-		String id = "user1";// + i;
-		User user = DistributedCache.get(id);
+		String id = "user11";// + i;
+		User user = readDistributedCache.get(id);
 		if (user == null) {
 		    System.out.println("can't get user by " + id);
 		} else {
