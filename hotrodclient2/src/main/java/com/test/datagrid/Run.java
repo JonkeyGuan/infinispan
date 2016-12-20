@@ -2,6 +2,8 @@ package com.test.datagrid;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -23,8 +25,10 @@ public class Run {
 			}
 		}
 
-		if (type.equals("put")) {
+		if (type.equalsIgnoreCase("put")) {
 			put();
+		} else if (type.equalsIgnoreCase("putInBulk")) {
+			putInBulk();
 		} else {
 			get();
 		}
@@ -43,6 +47,42 @@ public class Run {
 				DistributedCache.put(id, user);
 				String dateText = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
 				log.info(dateText + "	put	" + id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void putInBulk() {
+		int i = 0;
+		Map<String, User> map = new HashMap<String, User>();
+
+		String dateText = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+		log.info(dateText + "	put	start");
+
+		while (true) {
+			try {
+				if (seq.get() > 150000) {
+					if (map.size() > 0) {
+						DistributedCache.putAll(map);
+						dateText = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+						log.info(dateText + "	put	last batch");
+					}
+					break;
+				}
+
+				String id = "user" + seq.incrementAndGet();
+				User user = new User(id, data);
+				map.put(id, user);
+				i++;
+				if (i % 10000 == 0) {
+					DistributedCache.putAll(map);
+					map.clear();
+					i = 0;
+					dateText = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+					log.info(dateText + "	put	" + id);
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
