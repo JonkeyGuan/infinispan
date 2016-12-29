@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -29,6 +30,8 @@ public class Run {
 			put();
 		} else if (type.equalsIgnoreCase("putInBulk")) {
 			putInBulk();
+		} else if (type.endsWith("getViaThreads")) {
+			getViaThreads();
 		} else {
 			get();
 		}
@@ -112,6 +115,28 @@ public class Run {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static void getViaThreads() {
+
+		for (int i = 0; i < 10000; i++) {
+			Runnable myRunnable = new Runnable() {
+				public void run() {
+					while (true) {
+						String id = "user" + new Random().nextInt(100);
+						User user = DistributedCache.get(id);
+						if (user != null) {
+							String dateText = LocalDateTime.now()
+									.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+							log.info(dateText + " " + Thread.currentThread().getName() + "	get	" + id);
+						}
+					}
+				}
+			};
+			Thread thread = new Thread(myRunnable);
+			thread.start();
+		}
+
 	}
 
 }
