@@ -6,7 +6,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<org.infinispan.version>6.4.0.Final-redhat-4</org.infinispan.version>
+		<org.infinispan.version>6.2.1.Final-redhat-2</org.infinispan.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
 	</properties>
 
 	<dependencies>
@@ -21,7 +23,42 @@
 			<artifactId>infinispan-client-hotrod</artifactId>
 			<version>${org.infinispan.version}</version>
 		</dependency>
+
+		<!--Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

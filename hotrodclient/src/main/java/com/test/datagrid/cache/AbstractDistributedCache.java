@@ -1,4 +1,4 @@
-package com.test.datagrid;
+package com.test.datagrid.cache;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,29 +16,34 @@ import org.infinispan.commons.CacheConfigurationException;
 import org.infinispan.commons.util.FileLookupFactory;
 import org.infinispan.commons.util.Util;
 
-public class DistributedCache {
+import com.test.datagrid.TestCallbackHandler;
+import com.test.datagrid.User;
+
+public abstract class AbstractDistributedCache {
 
     // Match IPv4 (host:port) or IPv6 ([host]:port) addresses
     private static final Pattern ADDRESS_PATTERN = Pattern.compile("(\\[([0-9A-Fa-f:]+)\\]|([^:/?#]*))(?::(\\d*))?");
 
-    private static RemoteCacheManager cacheManager;
-    private static RemoteCache<String, User> cache;
+    private RemoteCacheManager cacheManager;
+    private RemoteCache<String, User> cache;
 
-    static {
+    abstract protected String getConf();
+
+    public void init() {
 	ConfigurationBuilder builder = new ConfigurationBuilder();
 	ClassLoader cl = Thread.currentThread().getContextClassLoader();
 	builder.classLoader(cl);
-	InputStream stream = FileLookupFactory.newInstance().lookupFile(RemoteCacheManager.HOTROD_CLIENT_PROPERTIES, cl);
+	InputStream stream = FileLookupFactory.newInstance().lookupFile(getConf(), cl);
 	Properties properties = null;
 	if (stream == null) {
-	    System.out.println("can't find file:" + RemoteCacheManager.HOTROD_CLIENT_PROPERTIES);
+	    System.out.println("can't find file:" + getConf());
 	} else {
 	    try {
 		properties = new Properties();
 		properties.load(stream);
 		builder.withProperties(properties);
 	    } catch (IOException e) {
-		throw new HotRodClientException("Issues configuring from client " + RemoteCacheManager.HOTROD_CLIENT_PROPERTIES, e);
+		throw new HotRodClientException("Issues configuring from client " + getConf(), e);
 	    } finally {
 		Util.close(stream);
 	    }
@@ -71,18 +76,17 @@ public class DistributedCache {
 	    cacheManager = new RemoteCacheManager(builder.build());
 	    cache = cacheManager.getCache("AionUser");
 	}
-
     }
 
-    public static void put(String id, User user) {
+    public void put(String id, User user) {
 	cache.put(id, user);
     }
 
-    public static void putIfAbsent(String id, User user) {
+    public void putIfAbsent(String id, User user) {
 	cache.putIfAbsent(id, user);
     }
 
-    public static User get(String id) {
+    public User get(String id) {
 	return cache.get(id);
     }
 }
