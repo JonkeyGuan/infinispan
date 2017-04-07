@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:infinispan:config:8.2 http://www.infinispan.org/schemas/infinispan-config-8.2.xsd"
+    xmlns="urn:infinispan:config:8.2">
+
+  <jgroups>
+     <stack-file name="udp" path="jgroups-jdbc.xml" />
+  </jgroups>
+
+  <cache-container default-cache="default" statistics="true">
+     <!-- <transport stack="udp" node-name="NoteA" /> -->
+     <!-- <replicated-cache name="myCache" mode="SYNC" /> -->
+     <distributed-cache name="CacheTemplate" mode="SYNC" owners="2" />
+  </cache-container>
+
+</infinispan>
+

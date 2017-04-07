@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.test</groupId>
+	<artifactId>jboss-mashalling-test</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+  <properties>
+    <jboss.marhsalling.version>1.4.9.Final</jboss.marhsalling.version>
+  </properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.marshalling</groupId>
+			<artifactId>jboss-marshalling-river</artifactId>
+			<version>${jboss.marhsalling.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.marshalling</groupId>
+			<artifactId>jboss-marshalling</artifactId>
+			<version>${jboss.marhsalling.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>
