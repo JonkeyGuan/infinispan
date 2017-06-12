@@ -45,7 +45,7 @@ public class Detect implements Runnable {
 	public void run() {
 		while (true) {
 			PingOperation.PingResult result = distributedCache.ping();
-			if (result == PingOperation.PingResult.SUCCESS || result == PingOperation.PingResult.SUCCESS_WITH_COMPAT) {
+			if (result.isSuccess()) {
 				updateLastActivityTime();
 			}
 			try {
