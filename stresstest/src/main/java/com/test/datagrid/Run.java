@@ -14,7 +14,7 @@ public class Run {
 		}
 		
 		for (int i = 0; i < threadCount; i++) {
-			new Tester().run();
+			new Thread(new Tester()).start();
 		}
 
 	}

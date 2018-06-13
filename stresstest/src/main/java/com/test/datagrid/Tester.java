@@ -18,7 +18,7 @@ public class Tester implements Runnable {
 		cache.init();
 
 		while (true) {
-			key = Thread.currentThread().getName() + System.currentTimeMillis();
+			key = Thread.currentThread().getName() + "-" + System.currentTimeMillis();
 			put(key);
 			get(key);
 		}
