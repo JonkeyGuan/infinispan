@@ -27,7 +27,7 @@ public class DistributedCache {
 	private static RemoteCacheManager cacheManager;
 	private static RemoteCacheImpl<String, String> cache;
 
-	public void init() {
+	public void init(String cacheName) {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		builder.classLoader(cl);
@@ -68,7 +68,8 @@ public class DistributedCache {
 			}
 
 			cacheManager = new RemoteCacheManager(builder.build());
-			cache = (RemoteCacheImpl)cacheManager.getCache("AionUser");
+			cache = (RemoteCacheImpl)cacheManager.getCache(cacheName);
+//			cache = (RemoteCacheImpl)cacheManager.getCache("AionUser");
 //			cache.addClientListener(new EventLogListener());
 //			cacheManager.switchToCluster(clusterName);
 //			cacheManager.switchToDefaultCluster();

@@ -2,7 +2,7 @@
 
 myDir=`dirname "$0"`
 
-nohup java -cp "${myDir}/lib/*:${myDir}/conf" com.test.datagrid.Run 10 >/dev/null 2>&1 &
+nohup java -cp "${myDir}/lib/*:${myDir}/conf" com.test.datagrid.Run 10 AionUser >/dev/null 2>&1 &
 
 sleep 3;
 count=`ps -ef | grep java | grep com.test.datagrid.Run |grep -v grep |wc -l`

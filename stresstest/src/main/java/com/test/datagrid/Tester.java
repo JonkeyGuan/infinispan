@@ -12,10 +12,15 @@ public class Tester implements Runnable {
 
 	private DistributedCache cache;
 	private String key;
+	private String cacheName;
+	
+	public Tester(String cacheName) {
+		this.cacheName  =cacheName;
+	}
 
 	public void run() {
 		cache = new DistributedCache();
-		cache.init();
+		cache.init(cacheName);
 
 		while (true) {
 			key = Thread.currentThread().getName() + "-" + System.currentTimeMillis();
